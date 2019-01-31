@@ -317,6 +317,33 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Called from H5P.Question.
    */
   DragText.prototype.registerDomElements = function () {
+
+    if (this.params.media && this.params.media.library) {
+      var type = this.params.media.library.split(' ')[0];
+      if (type === 'H5P.Image') {
+        if (this.params.media.params.file) {
+          // Register task image
+          this.setImage(this.params.media.params.file.path, {
+            disableImageZooming: this.params.behaviour.disableImageZooming,
+            alt: this.params.media.params.alt,
+            title: this.params.media.params.title
+          });
+        }
+      }
+      else if (type === 'H5P.Video') {
+        if (this.params.media.params.sources) {
+          // Register task video
+          this.setVideo(this.params.media);
+        }
+      }
+      else if (type === 'H5P.Audio') {
+        if (this.params.media.params) {
+          // Register task audio
+          this.setAudio(this.params.media);
+        }
+      }
+    }
+
     // Register task introduction text
     this.$introduction = $('<p id="' + this.introductionId + '">' + this.params.taskDescription + '</p>');
     this.setIntroduction(this.$introduction);
